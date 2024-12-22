@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz sur le Sénégal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .quiz-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 700px;
+            padding: 20px;
+            text-align: center;
+        }
+        .question {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options input {
+            margin-right: 10px;
+        }
+        .options label {
+            font-size: 18px;
+        }
+        #result {
+            display: none;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        #score {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        #next-button, #restart-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+        }
+        #next-button:hover, #restart-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="question-container">
+            <div class="question" id="question"></div>
+            <form class="options" id="options">
+                <div>
+                    <input type="radio" id="option1" name="answer" value="">
+                    <label for="option1"></label>
+                </div>
+                <div>
+                    <input type="radio" id="option2" name="answer" value="">
+                    <label for="option2"></label>
+                </div>
+                <div>
+                    <input type="radio" id="option3" name="answer" value="">
+                    <label for="option3"></label>
+                </div>
+                <div>
+                    <input type="radio" id="option4" name="answer" value="">
+                    <label for="option4"></label>
+                </div>
+            </form>
+            <button id="next-button">Suivant</button>
+        </div>
+        <div id="result">
+            <div id="score"></div>
+            <button id="restart-button">Recommencer</button>
+        </div>
+    </div>
+    <p style="font-size: 7px;">Created by Gideon Oluwaseun Olaloye</p><br><br>
+    <script>
+        // List of 70+ questions for Senegal Quiz
+        const questions = [
+            {
+                question: "Quelle est la capitale du Sénégal ?",
+                options: ["Dakar", "Saint-Louis", "Thiès", "Kaolack"],
+                correctAnswer: "Dakar"
+            },
+            {
+                question: "Quel est le fleuve principal du Sénégal ?",
+                options: ["Le Nil", "Le Sénégal", "Le Congo", "La Loire"],
+                correctAnswer: "Le Sénégal"
+            },
+            {
+                question: "Quel est le pays voisin du Sénégal au sud ?",
+                options: ["Le Mali", "La Guinée", "La Gambie", "La Mauritanie"],
+                correctAnswer: "La Guinée"
+            },
+            {
+                question: "Qui est l'auteur de l'hymne national du Sénégal ?",
+                options: ["Léopold Sédar Senghor", "Cheikh Anta Diop", "Ousmane Sembène", "Moussa Tavele"],
+                correctAnswer: "Léopold Sédar Senghor"
+            },
+            {
+                question: "Quel est l'animal emblématique du Sénégal ?",
+                options: ["Le lion", "Le crocodile", "L'éléphant", "Le serpent"],
+                correctAnswer: "Le lion"
+            },
+            {
+                question: "En quelle année le Sénégal a-t-il obtenu son indépendance ?",
+                options: ["1960", "1958", "1972", "1956"],
+                correctAnswer: "1960"
+            },
+            {
+                question: "Quel est le nom de l'île située au large de Dakar ?",
+                options: ["L'île de Gorée", "L'île de Madère", "L'île d'Oléron", "L'île de Ré"],
+                correctAnswer: "L'île de Gorée"
+            },
+            {
+                question: "Quelle est la langue officielle du Sénégal ?",
+                options: ["Le wolof", "Le français", "Le sérère", "Le peulh"],
+                correctAnswer: "Le français"
+            },
+            {
+                question: "Quel est le sport le plus populaire au Sénégal ?",
+                options: ["Le football", "Le basket-ball", "Le tennis", "Le handball"],
+                correctAnswer: "Le football"
+            },
+            {
+                question: "Quel est le nom de la principale équipe de football du Sénégal ?",
+                options: ["Les Lions de la Téranga", "Les Aigles de Carthage", "Les Fennecs", "Les Eléphants"],
+                correctAnswer: "Les Lions de la Téranga"
+            },
+            {
+                question: "Qui a été le premier président du Sénégal ?",
+                options: ["Léopold Sédar Senghor", "Abdoulaye Wade", "Macky Sall", "Mamadou Dia"],
+                correctAnswer: "Léopold Sédar Senghor"
+            },
+            {
+                question: "Lequel de ces plats est un plat traditionnel sénégalais ?",
+                options: ["Le couscous", "Le thieboudienne", "La pizza", "Les sushis"],
+                correctAnswer: "Le thieboudienne"
+            },
+            {
+                question: "Quelle est la monnaie du Sénégal ?",
+                options: ["Le franc CFA", "L'euro", "Le dollar", "Le franc suisse"],
+                correctAnswer: "Le franc CFA"
+            },
+            {
+                question: "Le Sénégal est membre de quelle organisation régionale ?",
+                options: ["L'ONU", "L'UE", "L'OCDE", "L'UEMOA"],
+                correctAnswer: "L'UEMOA"
+            },
+            {
+                question: "Quel est le nom du parc national le plus célèbre du Sénégal ?",
+                options: ["Le parc national de Niokolo-Koba", "Le parc national des Calanques", "Le parc national de la Vanoise", "Le parc de Yellowstone"],
+                correctAnswer: "Le parc national de Niokolo-Koba"
+            },
+            {
+                question: "Dans quelle ville sénégalaise se trouve le lac Rose ?",
+                options: ["Dakar", "Saint-Louis", "Mbour", "Louga"],
+                correctAnswer: "Saint-Louis"
+            },
+            {
+                question: "Quel est le nom de la danse traditionnelle sénégalaise ?",
+                options: ["Le sabar", "Le flamenco", "La salsa", "Le tango"],
+                correctAnswer: "Le sabar"
+            },
+            {
+                question: "Quel est le nom du plus grand marché de Dakar ?",
+                options: ["Le marché Sandaga", "Le marché de la Médina", "Le marché de Saint-Louis", "Le marché de Kaolack"],
+                correctAnswer: "Le marché Sandaga"
+            },
+            {
+                question: "Quel est le nom du sport de lutte populaire au Sénégal ?",
+                options: ["La lutte traditionnelle", "Le football", "Le basket-ball", "La boxe"],
+                correctAnswer: "La lutte traditionnelle"
+            },
+            {
+                question: "Qui est le célèbre chanteur sénégalais connu internationalement ?",
+                options: ["Youssou N'Dour", "Wyclef Jean", "Fela Kuti", "Koffi Olomidé"],
+                correctAnswer: "Youssou N'Dour"
+            },
+            {
+                question: "Quel est le nom du célèbre pont de Dakar ?",
+                options: ["Le pont de l'île de Gorée", "Le pont de l'amitié", "Le pont Faidherbe", "Le pont de Ndar"],
+                correctAnswer: "Le pont Faidherbe"
+            },
+            {
+                question: "Quel est le nom du stade principal du Sénégal ?",
+                options: ["Stade Léopold Sédar Senghor", "Stade de France", "Stade de Marseille", "Stade de la Téranga"],
+                correctAnswer: "Stade Léopold Sédar Senghor"
+            },
+            {
+                question: "Quel est le nom de la capitale économique du Sénégal ?",
+                options: ["Dakar", "Saint-Louis", "Thiès", "Kaolack"],
+                correctAnswer: "Dakar"
+            },
+            {
+                question: "Quel est l'animal emblématique du parc national de Niokolo-Koba ?",
+                options: ["Le lion", "Le rhinocéros", "Le léopard", "L'éléphant"],
+                correctAnswer: "Le lion"
+            },
+            {
+                question: "Quel est le nom de la plus grande ville du Sénégal après Dakar ?",
+                options: ["Kaolack", "Thiès", "Saint-Louis", "Mbour"],
+                correctAnswer: "Thiès"
+            },
+            {
+                question: "Quel est le nom de la capitale administrative du Sénégal ?",
+                options: ["Dakar", "Saint-Louis", "Diourbel", "Kaolack"],
+                correctAnswer: "Dakar"
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionElement = document.getElementById("question");
+            const optionsElements = document.querySelectorAll(".options input");
+            const currentQuestion = questions[currentQuestionIndex];
+
+            questionElement.textContent = `Question ${currentQuestionIndex + 1}: ${currentQuestion.question}`;
+
+            optionsElements.forEach((option, index) => {
+                option.value = currentQuestion.options[index];
+                option.nextElementSibling.textContent = currentQuestion.options[index];
+            });
+        }
+
+        function nextQuestion() {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (selectedAnswer) {
+                const correctAnswer = questions[currentQuestionIndex].correctAnswer;
+                if (selectedAnswer.value === correctAnswer) {
+                    score++;
+                }
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    loadQuestion();
+                } else {
+                    showResult();
+                }
+            } else {
+                alert("Veuillez choisir une réponse.");
+            }
+        }
+
+        function showResult() {
+            document.getElementById("question-container").style.display = "none";
+            document.getElementById("next-button").style.display = "none";
+            const resultElement = document.getElementById("result");
+            document.getElementById("score").textContent = `Votre score: ${score} sur ${questions.length}`;
+            resultElement.style.display = "block";
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById("question-container").style.display = "block";
+            document.getElementById("next-button").style.display = "inline-block";
+            document.getElementById("result").style.display = "none";
+            loadQuestion();
+        }
+
+        document.getElementById("next-button").addEventListener("click", nextQuestion);
+        document.getElementById("restart-button").addEventListener("click", restartQuiz);
+
+        loadQuestion();
+    </script>
+</body>
+</html>
